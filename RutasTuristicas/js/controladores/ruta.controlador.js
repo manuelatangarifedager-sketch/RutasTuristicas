@@ -67,27 +67,27 @@ function (
      * CIUDADES
      ********************************/
 
-    $scope.seleccionarCiudad = (ciudad) => {
+$scope.seleccionarCiudad = (ciudad) => {
 
-        $scope.ciudadSeleccionada = ciudad;
+    console.log("Ciudad seleccionada:", ciudad);
 
-        $scope.rutaSeleccionada = null;
-        $scope.paradas = [];
-        $scope.formRuta = {};
-        $scope.formParada = {};
+    $scope.ciudadSeleccionada = ciudad;
 
-        RutaServicio
-            .listarPorCiudad(ciudad.id)
-            .then(data => {
+    RutaServicio.listarPorCiudad(ciudad.id)
+        .then(data => {
 
-                $scope.rutas = data.map(
-                    ruta => new Ruta(ruta)
-                );
+            console.log("Rutas recibidas:", data);
 
-            });
+            $scope.rutas = data;
 
-    };
+        })
+        .catch(error => {
 
+            console.error("Error consultando rutas:", error);
+
+        });
+
+};
 
 
     /********************************
