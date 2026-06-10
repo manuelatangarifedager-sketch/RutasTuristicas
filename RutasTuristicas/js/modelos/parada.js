@@ -1,22 +1,37 @@
 class Parada {
 
-    constructor(data) {
+    constructor(json) {
 
-        this.id = data ? (data.id || 0) : 0;
+        this.id = json ? (json.id || 0) : 0;
 
-        this.orden = data ? data.orden : 1;
+        this.nombre = json
+            ? (json.nombre || "")
+            : "";
 
-        this.nombre = data ? data.nombre : "";
+        this.orden = json
+            ? (json.orden || 0)
+            : 0;
 
-        this.ruta = data ? new Ruta(data.ruta) : null;
+        this.longitud = json
+            ? (json.longitud || 0)
+            : 0;
 
-        this.longitud = data ? data.longitud : 0;
+        this.latitud = json
+            ? (json.latitud || 0)
+            : 0;
 
-        this.latitud = data ? data.latitud : 0;
+        this.tiempo = json
+            ? (json.tiempo || 0)
+            : 0;
 
-        this.tiempo = data ? data.tiempo : 0;
+        this.descripcion = json
+            ? (json.descripcion || "")
+            : "";
 
-        this.descripcion = data ? data.descripcion : "";
+        this.ruta = json && json.ruta
+            ? new Ruta(json.ruta)
+            : null;
+
     }
 
 }

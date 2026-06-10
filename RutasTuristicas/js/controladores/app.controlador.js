@@ -1,9 +1,11 @@
 app.controller("RutasTuristicasControlador", function ($scope) {
 
-    $scope.vistaActual = "";
+    $scope.vistaActual = "ciudades";
 
     $scope.cambiarVista = (vista) => {
+
         $scope.vistaActual = vista;
+
     };
 
 });

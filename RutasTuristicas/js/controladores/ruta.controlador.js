@@ -43,19 +43,21 @@ function (
 
     $scope.inicializar = () => {
 
-        CiudadServicio.listar()
-            .then(data => {
+        CiudadServicio.listar().then(data => {
 
-                $scope.ciudades = data;
+            $scope.ciudades = data.map(
+                ciudad => new Ciudad(ciudad)
+            );
 
-            });
+        });
 
-        TipoServicio.listar()
-            .then(data => {
+        TipoServicio.listar().then(data => {
 
-                $scope.tipos = data;
+            $scope.tipos = data.map(
+                tipo => new Tipo(tipo)
+            );
 
-            });
+        });
 
     };
 
@@ -71,12 +73,16 @@ function (
 
         $scope.rutaSeleccionada = null;
         $scope.paradas = [];
+        $scope.formRuta = {};
+        $scope.formParada = {};
 
         RutaServicio
             .listarPorCiudad(ciudad.id)
             .then(data => {
 
-                $scope.rutas = data;
+                $scope.rutas = data.map(
+                    ruta => new Ruta(ruta)
+                );
 
             });
 
@@ -98,36 +104,47 @@ function (
 
     $scope.guardarRuta = () => {
 
+        if (!$scope.ciudadSeleccionada) {
+
+            alert("Seleccione una ciudad.");
+
+            return;
+        }
+
         $scope.formRuta.idCiudad =
             $scope.ciudadSeleccionada.id;
+
+        let ruta = angular.copy($scope.formRuta);
 
         if ($scope.formRuta.id) {
 
             RutaServicio
-                .modificar($scope.formRuta)
+                .modificar(ruta)
                 .then(() => {
 
                     $scope.seleccionarCiudad(
                         $scope.ciudadSeleccionada
                     );
+
+                    $scope.formRuta = {};
 
                 });
 
         } else {
 
             RutaServicio
-                .agregar($scope.formRuta)
+                .agregar(ruta)
                 .then(() => {
 
                     $scope.seleccionarCiudad(
                         $scope.ciudadSeleccionada
                     );
 
+                    $scope.formRuta = {};
+
                 });
 
         }
-
-        $scope.formRuta = {};
 
     };
 
@@ -144,6 +161,9 @@ function (
                     $scope.seleccionarCiudad(
                         $scope.ciudadSeleccionada
                     );
+
+                    $scope.rutaSeleccionada = null;
+                    $scope.paradas = [];
 
                 });
 
@@ -173,9 +193,9 @@ function (
             .listarPorRuta(ruta.id)
             .then(data => {
 
-                $scope.paradas = data.sort(
-                    (a, b) => a.orden - b.orden
-                );
+                $scope.paradas = data
+                    .map(parada => new Parada(parada))
+                    .sort((a, b) => a.orden - b.orden);
 
             });
 
@@ -198,36 +218,47 @@ function (
 
     $scope.guardarParada = () => {
 
+        if (!$scope.rutaSeleccionada) {
+
+            alert("Seleccione una ruta.");
+
+            return;
+        }
+
         $scope.formParada.idRuta =
             $scope.rutaSeleccionada.id;
+
+        let parada = angular.copy($scope.formParada);
 
         if ($scope.formParada.id) {
 
             ParadaServicio
-                .modificar($scope.formParada)
+                .modificar(parada)
                 .then(() => {
 
                     $scope.seleccionarRuta(
                         $scope.rutaSeleccionada
                     );
+
+                    $scope.formParada = {};
 
                 });
 
         } else {
 
             ParadaServicio
-                .agregar($scope.formParada)
+                .agregar(parada)
                 .then(() => {
 
                     $scope.seleccionarRuta(
                         $scope.rutaSeleccionada
                     );
 
+                    $scope.formParada = {};
+
                 });
 
         }
-
-        $scope.formParada = {};
 
     };
 

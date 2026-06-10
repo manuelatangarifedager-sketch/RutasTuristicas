@@ -1,16 +1,21 @@
 class Ruta {
 
-    constructor(data) {
+    constructor(json) {
 
-        this.id = data ? (data.id || 0) : 0;
+        this.id = json ? (json.id || 0) : 0;
+        this.nombre = json ? (json.nombre || "") : "";
 
-        this.nombre = data ? data.nombre : "";
+        this.descripcion = json
+            ? (json.descripcion || "")
+            : "";
 
-        this.descripcion = data ? data.descripcion : "";
+        this.ciudad = json && json.ciudad
+            ? new Ciudad(json.ciudad)
+            : null;
 
-        this.ciudad = data ? new Ciudad(data.ciudad) : null;
-
-        this.tipo = data ? new Tipo(data.tipo) : null;
+        this.tipo = json && json.tipo
+            ? new Tipo(json.tipo)
+            : null;
     }
 
 }
