@@ -27,6 +27,7 @@ function (
     $scope.rutas = [];
     $scope.formRuta = {};
     $scope.rutaSeleccionada = null;
+    $scope.mostrarFormularioRuta = false;
 
     /********************************
      * PARADAS
@@ -34,8 +35,6 @@ function (
 
     $scope.paradas = [];
     $scope.formParada = {};
-
-
 
     /********************************
      * INICIALIZAR
@@ -61,148 +60,119 @@ function (
 
     };
 
-
-
     /********************************
      * CIUDADES
      ********************************/
 
-$scope.seleccionarCiudad = (ciudad) => {
+    $scope.seleccionarCiudad = (ciudad) => {
 
-    console.log("Ciudad seleccionada:", ciudad);
+        $scope.ciudadSeleccionada = ciudad;
 
-    $scope.ciudadSeleccionada = ciudad;
-
-    RutaServicio.listarPorCiudad(ciudad.id)
-        .then(data => {
-
-            console.log("Rutas recibidas:", data);
-
-            $scope.rutas = data;
-
-        })
-        .catch(error => {
-
-            console.error("Error consultando rutas:", error);
-
-        });
-
-};
-
-
-    /********************************
-     * RUTAS
-     ********************************/
-
-    $scope.editarRuta = (ruta) => {
-
-        $scope.formRuta = angular.copy(ruta);
-
-    };
-
-
-
-    $scope.guardarRuta = () => {
-
-        if (!$scope.ciudadSeleccionada) {
-
-            alert("Seleccione una ciudad.");
-
-            return;
-        }
-
-        $scope.formRuta.idCiudad =
-            $scope.ciudadSeleccionada.id;
-
-        let ruta = angular.copy($scope.formRuta);
-
-        if ($scope.formRuta.id) {
-
-            RutaServicio
-                .modificar(ruta)
-                .then(() => {
-
-                    $scope.seleccionarCiudad(
-                        $scope.ciudadSeleccionada
-                    );
-
-                    $scope.formRuta = {};
-
-                });
-
-        } else {
-
-            RutaServicio
-                .agregar(ruta)
-                .then(() => {
-
-                    $scope.seleccionarCiudad(
-                        $scope.ciudadSeleccionada
-                    );
-
-                    $scope.formRuta = {};
-
-                });
-
-        }
-
-    };
-
-
-
-    $scope.eliminarRuta = (id) => {
-
-        if (confirm("¿Desea eliminar esta ruta?")) {
-
-            RutaServicio
-                .eliminar(id)
-                .then(() => {
-
-                    $scope.seleccionarCiudad(
-                        $scope.ciudadSeleccionada
-                    );
-
-                    $scope.rutaSeleccionada = null;
-                    $scope.paradas = [];
-
-                });
-
-        }
-
-    };
-
-
-
-    $scope.limpiarFormRuta = () => {
-
-        $scope.formRuta = {};
-
-    };
-
-
-
-    $scope.seleccionarRuta = (ruta) => {
-
-        $scope.rutaSeleccionada = ruta;
-
-        $scope.formParada = {
-            idRuta: ruta.id
-        };
-
-        ParadaServicio
-            .listarPorRuta(ruta.id)
+        RutaServicio
+            .listarPorCiudad(ciudad.id)
             .then(data => {
 
-                $scope.paradas = data
-                    .map(parada => new Parada(parada))
-                    .sort((a, b) => a.orden - b.orden);
+                $scope.rutas = data;
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "Error consultando rutas:",
+                    error
+                );
 
             });
 
     };
 
+   /********************************
+ * RUTAS
+ ********************************/
 
+$scope.editarRuta = (ruta) => {
 
+    $scope.formRuta = angular.copy(ruta);
+
+};
+
+$scope.guardarRuta = () => {
+
+    if (!$scope.ciudadSeleccionada) {
+
+        alert("Seleccione una ciudad.");
+
+        return;
+
+    }
+
+    let ruta = new Ruta($scope.formRuta);
+
+    ruta.ciudad = $scope.ciudadSeleccionada;
+
+    if (!ruta.tipo) {
+
+        alert("Seleccione un tipo.");
+
+        return;
+
+    }
+
+    if ($scope.formRuta.id) {
+
+        RutaServicio
+            .modificar(ruta)
+            .then(() => {
+
+                $scope.seleccionarCiudad(
+                    $scope.ciudadSeleccionada
+                );
+
+            });
+
+    } else {
+
+        RutaServicio
+            .agregar(ruta)
+            .then(() => {
+
+                $scope.seleccionarCiudad(
+                    $scope.ciudadSeleccionada
+                );
+
+            });
+
+    }
+
+    $scope.formRuta = {};
+
+};
+
+$scope.limpiarFormRuta = () => {
+
+    $scope.formRuta = {};
+
+};
+
+$scope.eliminarRuta = (id) => {
+
+    if (confirm("¿Desea eliminar esta ruta?")) {
+
+        RutaServicio
+            .eliminar(id)
+            .then((respuesta) => {
+
+                $scope.seleccionarCiudad(
+                    $scope.ciudadSeleccionada
+                );
+
+                $scope.rutaSeleccionada = null;
+
+            });
+
+    }
+
+};
     /********************************
      * PARADAS
      ********************************/
@@ -214,8 +184,6 @@ $scope.seleccionarCiudad = (ciudad) => {
 
     };
 
-
-
     $scope.guardarParada = () => {
 
         if (!$scope.rutaSeleccionada) {
@@ -223,12 +191,14 @@ $scope.seleccionarCiudad = (ciudad) => {
             alert("Seleccione una ruta.");
 
             return;
+
         }
 
         $scope.formParada.idRuta =
             $scope.rutaSeleccionada.id;
 
-        let parada = angular.copy($scope.formParada);
+        let parada =
+            angular.copy($scope.formParada);
 
         if ($scope.formParada.id) {
 
@@ -262,8 +232,6 @@ $scope.seleccionarCiudad = (ciudad) => {
 
     };
 
-
-
     $scope.eliminarParada = (id) => {
 
         if (confirm("¿Desea eliminar esta parada?")) {
@@ -282,15 +250,11 @@ $scope.seleccionarCiudad = (ciudad) => {
 
     };
 
-
-
     $scope.limpiarFormParada = () => {
 
         $scope.formParada = {};
 
     };
-
-
 
     $scope.inicializar();
 
