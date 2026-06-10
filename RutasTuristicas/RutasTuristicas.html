@@ -1,0 +1,419 @@
+<html ng-app="RutasTuristicasApp">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <!-- APP -->
+    <script src="js/app.js"></script>
+
+    <!-- MODELOS -->
+    <script src="js/modelos/ciudad.js"></script>
+    <script src="js/modelos/tipo.js"></script>
+    <script src="js/modelos/ruta.js"></script>
+    <script src="js/modelos/parada.js"></script>
+
+    <!-- SERVICIOS -->
+    <script src="js/servicios/ciudad.servicio.js"></script>
+    <script src="js/servicios/tipo.servicio.js"></script>
+    <script src="js/servicios/ruta.servicio.js"></script>
+    <script src="js/servicios/parada.servicio.js"></script>
+
+    <!-- CONTROLADORES -->
+    <script src="js/controladores/app.controlador.js"></script>
+    <script src="js/controladores/ruta.controlador.js"></script>
+
+</head>
+
+<body ng-controller="RutasTuristicasControlador">
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-dark bg-dark">
+
+        <span class="navbar-text text-white ms-3">
+
+            <i class="bi bi-map"></i>
+
+            Sistema de Rutas Turísticas
+
+        </span>
+
+    </nav>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- SIDEBAR -->
+
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse p-0 vh-100">
+
+                <ul class="nav flex-column gap-1 px-2">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link rounded"
+                           ng-click="cambiarVista('rutas')">
+
+                            <i class="bi bi-signpost-split me-2"></i>
+
+                            Gestión de Rutas
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <!-- CONTENIDO -->
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+
+                <div ng-if="vistaActual === 'rutas'"
+                     ng-controller="RutaControlador">
+
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+
+                        <h2>Gestión de Rutas Turísticas</h2>
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- CIUDADES -->
+
+                        <div class="col-lg-3">
+
+                            <div class="card shadow-sm">
+
+                                <div class="card-header bg-primary text-white">
+
+                                    Ciudades
+
+                            <div class="list-group">
+
+                <button type="button"
+                        class="list-group-item list-group-item-action"
+
+                        ng-repeat="ciudad in ciudades"
+
+                        ng-click="seleccionarCiudad(ciudad)"
+
+                        ng-class="{
+                            'active':
+                            ciudadSeleccionada &&
+                            ciudadSeleccionada.id === ciudad.id
+                        }">
+
+                    {{ciudad.nombre}}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="alert alert-info mt-3"
+         ng-if="ciudadSeleccionada">
+
+        <strong>Ciudad seleccionada:</strong>
+
+        {{ciudadSeleccionada.nombre}}
+
+    </div>
+
+</div>   
+
+                        <!-- RUTAS -->
+
+                        <div class="col-lg-4">
+
+                            <div class="card shadow-sm mb-3">
+
+                                <div class="card-header bg-dark text-white">
+
+                                    Formulario Ruta
+
+                                </div>
+
+                                <div class="card-body">
+
+                                    <form ng-submit="guardarRuta()">
+
+                                        <div class="mb-2">
+
+                                            <label>Nombre</label>
+
+                                            <input type="text"
+                                                   class="form-control"
+                                                   ng-model="formRuta.nombre"
+                                                   required>
+
+                                        </div>
+
+                                        <div class="mb-2">
+
+                                            <label>Descripción</label>
+
+                                            <textarea class="form-control"
+                                                      ng-model="formRuta.descripcion">
+                                            </textarea>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label>Tipo</label>
+
+                                            <select class="form-select"
+                                                    ng-model="tipoSeleccionado"
+                                                    ng-options="tipo as tipo.nombre for tipo in tipos"
+                                                    required>
+
+                                                <option value="">
+                                                    Seleccione...
+                                                </option>
+
+                                            </select>
+
+                                        </div>
+
+                                        <button type="submit"
+                                                class="btn btn-success w-100">
+
+                                            Guardar Ruta
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                            <div class="list-group shadow-sm">
+
+                                <button type="button"
+                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                        ng-repeat="ruta in rutas"
+                                        ng-click="seleccionarRuta(ruta)">
+
+                                    <span>
+
+                                        {{ruta.nombre}}
+
+                                    </span>
+
+                                    <div>
+
+                                        <span class="btn btn-warning btn-sm"
+                                              ng-click="editarRuta(ruta); $event.stopPropagation();">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </span>
+
+                                        <span class="btn btn-danger btn-sm"
+                                              ng-click="eliminarRuta(ruta.id); $event.stopPropagation();">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </span>
+
+                                    </div>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- PARADAS -->
+
+                        <div class="col-lg-5">
+
+                            <div ng-if="!rutaSeleccionada"
+                                 class="alert alert-info">
+
+                                Seleccione una ruta para administrar sus paradas.
+
+                            </div>
+
+                            <div ng-if="rutaSeleccionada">
+
+                                <div class="card shadow-sm">
+
+                                    <div class="card-header bg-secondary text-white">
+
+                                        Paradas de:
+
+                                        <strong>
+
+                                            {{rutaSeleccionada.nombre}}
+
+                                        </strong>
+
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <form ng-submit="guardarParada()">
+
+                                            <div class="row">
+
+                                                <div class="col-md-4 mb-2">
+
+                                                    <input type="number"
+                                                           class="form-control"
+                                                           placeholder="Orden"
+                                                           ng-model="formParada.orden"
+                                                           required>
+
+                                                </div>
+
+                                                <div class="col-md-8 mb-2">
+
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           placeholder="Nombre"
+                                                           ng-model="formParada.nombre"
+                                                           required>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+
+                                                <div class="col-md-6 mb-2">
+
+                                                    <input type="number"
+                                                           step="0.0000001"
+                                                           class="form-control"
+                                                           placeholder="Latitud"
+                                                           ng-model="formParada.latitud">
+
+                                                </div>
+
+                                                <div class="col-md-6 mb-2">
+
+                                                    <input type="number"
+                                                           step="0.0000001"
+                                                           class="form-control"
+                                                           placeholder="Longitud"
+                                                           ng-model="formParada.longitud">
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="mb-2">
+
+                                                <input type="number"
+                                                       class="form-control"
+                                                       placeholder="Tiempo"
+                                                       ng-model="formParada.tiempo">
+
+                                            </div>
+
+                                            <div class="mb-3">
+
+                                                <textarea class="form-control"
+                                                          placeholder="Descripción"
+                                                          ng-model="formParada.descripcion">
+                                                </textarea>
+
+                                            </div>
+
+                                            <button type="submit"
+                                                    class="btn btn-success w-100">
+
+                                                Guardar Parada
+
+                                            </button>
+
+                                        </form>
+
+                                        <hr>
+
+                                        <table class="table table-bordered table-sm">
+
+                                            <thead>
+
+                                                <tr>
+
+                                                    <th>Orden</th>
+                                                    <th>Nombre</th>
+                                                    <th>Acción</th>
+
+                                                </tr>
+
+                                            </thead>
+
+                                            <tbody>
+
+                                                <tr ng-repeat="parada in paradas">
+
+                                                    <td>{{parada.orden}}</td>
+
+                                                    <td>{{parada.nombre}}</td>
+
+                                                    <td>
+
+                                                        <button class="btn btn-warning btn-sm"
+                                                                ng-click="editarParada(parada)">
+
+                                                            <i class="bi bi-pencil"></i>
+
+                                                        </button>
+
+                                                        <button class="btn btn-danger btn-sm"
+                                                                ng-click="eliminarParada(parada.id)">
+
+                                                            <i class="bi bi-trash"></i>
+
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
