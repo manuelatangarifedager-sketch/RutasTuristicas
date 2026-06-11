@@ -176,7 +176,46 @@ $scope.eliminarRuta = (id) => {
     /********************************
      * PARADAS
      ********************************/
+    $scope.seleccionarRuta = (ruta) => {
 
+    console.log("Ruta seleccionada:", ruta); // 👈 DEBUG
+
+    $scope.rutaSeleccionada = ruta;
+
+    ParadaServicio
+        .listarPorRuta(ruta.id)
+        .then(data => {
+
+            console.log("Paradas recibidas:", data); // 👈 DEBUG
+
+            $scope.paradas = data.sort((a, b) => a.orden - b.orden);
+
+        });
+
+};
+
+  //  $scope.seleccionarRuta = (ruta) => {
+
+   // $scope.rutaSeleccionada = ruta;
+
+  //  ParadaServicio
+  //      .listarPorRuta(ruta.id)
+   //     .then(data => {
+
+            // ORDENAR POR CAMPO ORDEN
+     //       $scope.paradas = data.sort((a, b) => a.orden - b.orden);
+
+    //    })
+   //     .catch(error => {
+
+     //       console.error(
+     //           "Error consultando paradas:",
+     //           error
+      //      );
+//
+    //    });
+
+//};
     $scope.editarParada = (parada) => {
 
         $scope.formParada =

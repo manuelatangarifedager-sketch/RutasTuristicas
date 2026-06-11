@@ -182,7 +182,7 @@
 
                                             <div class="col-md-2">
 
-                                                <button type="submit" class="btn btn-success w-100">
+                                                <button type="submit" class="btn btn-success btn-sm">
 
                                                     Guardar
 
@@ -266,6 +266,126 @@
 
                                     </table>
 
+                                    <!-- PARADAS DE LA RUTA -->
+
+                                    <!--   <div class="card shadow-sm mt-4" ng-if="rutaSeleccionada">-->
+                                    <div class="card shadow-sm mt-4" ng-if="rutaSeleccionada">
+
+                                        <div class="card-header bg-info text-white">
+                                            Paradas de la Ruta:
+                                            <strong class="text-warning">
+                                                {{rutaSeleccionada.nombre}}
+                                            </strong>
+                                        </div>
+
+                                        <div class="card-body">
+
+                                            <table class="table table-sm table-bordered align-middle">
+
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Orden</th>
+                                                        <th>Nombre</th>
+                                                        <th>Tiempo</th>
+                                                        <th>Latitud</th>
+                                                        <th>Longitud</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+
+                                                    <tr ng-repeat="parada in paradas">
+
+                                                        <td>{{parada.orden}}</td>
+                                                        <td>{{parada.nombre}}</td>
+                                                        <td>{{parada.tiempo}}</td>
+                                                        <td>{{parada.latitud}}</td>
+                                                        <td>{{parada.longitud}}</td>
+
+                                                    </tr>
+
+                                                </tbody>
+
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <!--   Paradas de la Ruta:
+
+                                            <strong>
+
+                                                {{rutaSeleccionada.nombre}}
+
+                                            </strong>
+
+                                        </div>
+
+                                        <div class="card-body">
+
+                                            <table class="table table-sm table-bordered align-middle">
+
+                                                <thead class="table-light">
+
+                                                    <tr>
+
+                                                        <th>Orden</th>
+
+                                                        <th>Nombre</th>
+
+                                                        <th>Tiempo</th>
+
+                                                        <th>Latitud</th>
+
+                                                        <th>Longitud</th>
+
+                                                    </tr>
+
+                                                </thead>
+
+                                                <tbody>
+
+                                                    <tr ng-repeat="parada in paradas">
+
+                                                        <td>
+
+                                                            {{parada.orden}}
+
+                                                        </td>
+
+                                                        <td>
+
+                                                            {{parada.nombre}}
+
+                                                        </td>
+
+                                                        <td>
+
+                                                            {{parada.tiempo}}
+
+                                                        </td>
+
+                                                        <td>
+
+                                                            {{parada.latitud}}
+
+                                                        </td>
+
+                                                        <td>
+
+                                                            {{parada.longitud}}
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                </tbody>
+
+                                            </table>-->
+
                                 </div>
 
                             </div>
@@ -276,9 +396,13 @@
 
                 </div>
 
-            </main>
-
         </div>
+
+    </div>
+
+    </main>
+
+    </div>
 
     </div>
 

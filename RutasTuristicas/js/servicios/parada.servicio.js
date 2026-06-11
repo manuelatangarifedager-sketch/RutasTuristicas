@@ -36,5 +36,12 @@ app.service("ParadaServicio", function ($http) {
             .then(respuesta => respuesta.data);
 
     };
+    this.listarPorRuta = (idRuta) => {
+
+    return $http
+        .get(`${URL}ruta/${idRuta}`)
+        .then(respuesta => respuesta.data);
+
+};
 
 });
