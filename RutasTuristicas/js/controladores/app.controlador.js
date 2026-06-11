@@ -1,6 +1,6 @@
 app.controller("RutasTuristicasControlador", function ($scope) {
 
-    $scope.vistaActual = "ciudades";
+    $scope.vistaActual = "rutas";
 
     $scope.cambiarVista = (vista) => {
 

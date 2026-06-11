@@ -257,6 +257,23 @@
                                                         <i class="bi bi-trash"></i>
 
                                                     </button>
+                                                    <!-- LEAFLET -->
+                                                    <!-- Leaflet CSS -->
+                                                    <link rel="stylesheet"
+                                                        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+                                                    <!-- Routing CSS -->
+                                                    <link rel="stylesheet"
+                                                        href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+                                                    <!-- Leaflet JS -->
+                                                    <script
+                                                        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+                                                    <!-- Routing Machine JS -->
+                                                    <script
+                                                        src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
 
                                                 </td>
 
@@ -265,6 +282,9 @@
                                         </tbody>
 
                                     </table>
+                                    <div class="mt-3">
+                                        <div id="map" style="height: 400px; width: 100%; border:1px solid #ccc;"></div>
+                                    </div>
 
                                     <!-- PARADAS DE LA RUTA -->
 
@@ -281,86 +301,88 @@
                                         <div class="card-body">
                                             <form ng-submit="guardarParada()" class="bg-light p-3 rounded border mb-3">
 
-    <div class="row g-2">
+                                                <div class="row g-2">
 
-        <div class="col-md-2">
-            <input type="number" class="form-control"
-                ng-model="formParada.orden"
-                placeholder="Orden" required>
-        </div>
+                                                    <div class="col-md-2">
+                                                        <input type="number" class="form-control"
+                                                            ng-model="formParada.orden" placeholder="Orden" required>
+                                                    </div>
 
-        <div class="col-md-3">
-            <input type="text" class="form-control"
-                ng-model="formParada.nombre"
-                placeholder="Nombre" required>
-        </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" class="form-control"
+                                                            ng-model="formParada.nombre" placeholder="Nombre" required>
+                                                    </div>
 
-        <div class="col-md-2">
-            <input type="number" class="form-control"
-                ng-model="formParada.tiempo"
-                placeholder="Tiempo">
-        </div>
+                                                    <div class="col-md-2">
+                                                        <input type="number" class="form-control"
+                                                            ng-model="formParada.tiempo" placeholder="Tiempo">
+                                                    </div>
 
-        <div class="col-md-2">
-            <input type="text" class="form-control"
-                ng-model="formParada.latitud"
-                placeholder="Latitud">
-        </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" class="form-control"
+                                                            ng-model="formParada.latitud" placeholder="Latitud">
+                                                    </div>
 
-        <div class="col-md-2">
-            <input type="text" class="form-control"
-                ng-model="formParada.longitud"
-                placeholder="Longitud">
-        </div>
+                                                    <div class="col-md-2">
+                                                        <input type="text" class="form-control"
+                                                            ng-model="formParada.longitud" placeholder="Longitud">
+                                                    </div>
 
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-success btn-sm">
-                Guardar
-            </button>
-        </div>
+                                                    <div class="col-md-3">
+                                                        <input type="text" class="form-control"
+                                                            ng-model="formParada.descripcion" placeholder="Descripción">
+                                                    </div>
 
-    </div>
+                                                    <div class="col-md-1">
+                                                        <button type="submit" class="btn btn-success btn-sm">
+                                                            Guardar
+                                                        </button>
+                                                    </div>
 
-</form>
+                                                </div>
+
+                                            </form>
 
                                             <table class="table table-sm table-bordered align-middle">
 
                                                 <thead class="table-light">
-    <tr>
-        <th>Orden</th>
-        <th>Nombre</th>
-        <th>Tiempo</th>
-        <th>Latitud</th>
-        <th>Longitud</th>
-        <th>Acciones</th>
-    </tr>
-</thead>
+                                                    <tr>
+                                                        <th>Orden</th>
+                                                        <th>Nombre</th>
+                                                        <th>Tiempo</th>
+                                                        <th>Latitud</th>
+                                                        <th>Longitud</th>
+                                                        <th>Acciones</th>
+                                                        <th>Descripción</th>
+                                                    </tr>
+                                                </thead>
 
                                                 <tbody>
 
-                                                   <tr ng-repeat="parada in paradas">
+                                                    <tr ng-repeat="parada in paradas">
 
-    <td>{{parada.orden}}</td>
-    <td>{{parada.nombre}}</td>
-    <td>{{parada.tiempo}}</td>
-    <td>{{parada.latitud}}</td>
-    <td>{{parada.longitud}}</td>
+                                                        <td>{{parada.orden}}</td>
+                                                        <td>{{parada.nombre}}</td>
+                                                        <td>{{parada.tiempo}}</td>
+                                                        <td>{{parada.latitud}}</td>
+                                                        <td>{{parada.longitud}}</td>
+                                                        <td>{{parada.descripcion}}</td>
 
-    <td>
+                                                        <td>
 
-        <button class="btn btn-sm btn-outline-warning me-1"
-            ng-click="editarParada(parada)">
-            <i class="bi bi-pencil"></i>
-        </button>
+                                                            <button class="btn btn-sm btn-outline-warning me-1"
+                                                                ng-click="editarParada(parada)">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </button>
 
-        <button class="btn btn-sm btn-outline-danger"
-            ng-click="eliminarParada(parada.id)">
-            <i class="bi bi-trash"></i>
-        </button>
+                                                            <button class="btn btn-sm btn-outline-danger"
+                                                                ng-click="eliminarParada(parada.id)">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
 
-    </td>
+                                                        </td>
 
-</tr>
+                                                    </tr>
                                                 </tbody>
 
                                             </table>
